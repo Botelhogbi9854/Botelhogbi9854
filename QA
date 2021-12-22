@@ -1,0 +1,84 @@
+***Settings***
+Library     SeleniumLibrary
+
+*** Variables ***
+${url}              http://training-wheels-protocol.herokuapp.com
+
+
+
+*** Keywords ***
+
+Nova Sessão
+    Open Browser                        ${url}          chrome
+    
+
+Encerra Sessão 
+    Capture Page Screenshot
+    Close Browser 
+    
+    
+    Selecionando por id
+    Go To                                  ${url}/radios
+    Select Radio Button                    movies      cap     
+    Radio Button Should Be Set To          movies      cap
+
+Selecionando por Value 
+    Go To                                  ${url}/radios
+    Select Radio Button                    movies      guardians     
+    Radio Button Should Be Set To          movies      guardians 
+    
+    
+    
+    ***Settings***
+
+Resource        base.robot
+
+Test Setup      Nova Sessão
+Test Teardown   Encerra Sessão 
+
+***Test Cases***
+
+Verifica com valor ao informar o número da linha 
+
+    Go To                               ${url}/tables
+    Table Row Should Contain            id:actors   2   @vindiesel
+
+
+Descobre a linha pelo texto chave e valida os demais valores
+
+    Go To                               ${url}/tables
+    ${target}=                          Get WebElement            xpath:.//tr[contains(., '@chadwickboseman')]
+    Log                                 ${target.text}
+    Log To Console                      ${target.text}
+    Should Contain                      ${target.text} 
+    
+    
+    
+    
+    
+    *** Variables ***
+${check_thor}       id:thor
+${check_iron}       css:input[value='iron-man']
+${check_panther}    xpath://*[@id='checkboxes']/input[7]
+
+*** Test Cases ***
+Marcando opção com ID  
+    Go To                               ${url}/checkboxes
+    Select Checkbox                     ${check_thor}
+    Checkbox Should Be Selected         ${check_thor} 
+   
+Marcando opção com CSS Selector 
+    Go To                               ${url}/checkboxes
+    Select Checkbox                     ${check_iron}
+    Checkbox Should Be Selected         ${check_iron}
+  
+Marcando opção com Xpath
+    [tags]      ironman
+    Go To                               ${url}/checkboxes
+    Select Checkbox                     ${check_panther}
+    Checkbox Should Be Selected         ${check_panther}
+    
+    
+  
+    
+    
